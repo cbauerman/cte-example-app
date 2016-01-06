@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    h1 Borrowers
+    
+    table(style="border:1px solid black")
+        tr
+            th(style="border:1px solid black") ID
+            th(style="border:1px solid black") Name
+            th(style="border:1px solid black") Days Borrowered
+        for borrower in borrowers
+            tr
+                td(style="border:1px solid black")= borrower.id
+                td(style="border:1px solid black")= borrower.name
+                td(style="border:1px solid black")= borrower.daysKept
+        else
+            tr
+                td No borrowers!
+    
