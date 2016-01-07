@@ -8,11 +8,13 @@ block content
             th(style="border:1px solid black") ID
             th(style="border:1px solid black") Name
             th(style="border:1px solid black") Days Borrowered
+            th(style="border:1px solid black") Next Id
         for borrower in borrowers
             tr
                 td(style="border:1px solid black")= borrower.id
                 td(style="border:1px solid black")= borrower.name
                 td(style="border:1px solid black")= borrower.daysKept
+                td(style="border:1px solid black")= borrower.nextId
         else
             tr
                 td No borrowers!
