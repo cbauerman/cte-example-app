@@ -18,7 +18,7 @@ var createBorrower = function(name, daysKept) {
             });
         }
     });
-}
+};
 
 
 router.get('/', function(req, res) {
@@ -97,7 +97,7 @@ router.get('/first20days', function (req, res, next) {
     });
   }).catch(function(err) {
     next(err);
-  })
+  });
 });
 
 router.get('/last3borrowers', function (req, res, next) {
@@ -134,8 +134,8 @@ router.get('/last3borrowers', function (req, res, next) {
     });
   }).catch(function(err) {
     next(err);
-  })
-})
+  });
+});
 
 
 module.exports = router;
