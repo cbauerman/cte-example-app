@@ -71,7 +71,7 @@ router.get('/first20days', function (req, res, next) {
       cteAttributes: ['totalDays'],
       initial: {
         totalDays: { $col: 'Borrowers.daysKept' },
-        where: { Borrowers: { id: 1 } }
+        where: { Borrowers: { name: 'George' } }
       },
       recursive: {
         totalDays: {
