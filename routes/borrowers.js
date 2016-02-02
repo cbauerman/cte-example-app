@@ -63,6 +63,19 @@ router.get('/reset', function (req, res, next) {
     
 });
 
+router.get('/as', function (req, res, next) {
+
+    models.Borrower.findAll({
+        attributes: { include: [['name', 'eman']] }
+    }).then(function (borrowers) {
+
+        res.render('borrowers', {
+            borrowers: borrowers
+        });
+    });
+
+});
+
 router.get('/first20days', function (req, res, next) {
   models.Borrower.findAll({
     cte: [{
@@ -70,19 +83,19 @@ router.get('/first20days', function (req, res, next) {
       model: models.Borrower,
       cteAttributes: ['totalDays'],
       initial: {
-        totalDays: { $col: 'Borrowers.daysKept' },
-        where: { Borrowers: { name: 'George' } }
+        totalDays: { $model: 'daysKept' },
+        where: { name: 'George' }
       },
       recursive: {
         totalDays: {
           $add: [
-            { $col: 'Borrowers.daysKept' },
-            { $col: 'a.totalDays' }
+            { $model: 'daysKept' },
+            { $cte: 'totalDays' }
           ]
         },
-        find: 'next',
+        next: 'next',
         where: {
-          a: {
+          cte: {
             totalDays: {
               $lt: 20
             }
@@ -90,8 +103,10 @@ router.get('/first20days', function (req, res, next) {
         }
       }
     }],
+    includeCTEAttributes: ['totalDays'],
     cteSelect: 'a'
   }).then(function (borrowers) {
+
     res.render('borrowers', {
       borrowers: borrowers
     });
@@ -113,7 +128,7 @@ router.get('/last3borrowers', function (req, res, next) {
       recursive: {
         numberCounted: {
           $add: [
-            { $col: 'a.numberCounted' },
+            { $cte: 'numberCounted' },
             1
           ]
         },

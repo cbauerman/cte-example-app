@@ -13,6 +13,7 @@
     "express": "~4.13.1",
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
+    "sequelize": "git+http://github.com/cbauerme/sequelize.git",
     "serve-favicon": "~2.3.0"
   }
 }
