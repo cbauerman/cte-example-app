@@ -63,6 +63,19 @@ router.get('/reset', function (req, res, next) {
     
 });
 
+router.get('/regularSelect', function (req, res, next) {
+
+    models.Borrower.findAll({
+        include: [{model: models.Borrower, as: 'previous', required: true}] 
+    }).then(function (borrowers) {
+
+        res.render('borrowers', {
+            borrowers: borrowers
+        });
+    });
+});
+
+
 router.get('/as', function (req, res, next) {
 
     models.Borrower.findAll({
