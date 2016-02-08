@@ -41,3 +41,4 @@ typings
 
 #omit VSCode Debugging info
 launch.json
+*.sqlite

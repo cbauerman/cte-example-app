@@ -47,7 +47,7 @@ router.get('/reset', function (req, res, next) {
             { name: 'George', daysKept: 5 },
             { name: 'Lindsey', daysKept: 7 },
             { name: 'Henry', daysKept: 3 },
-            { name: 'Sam', daysKept: 22 },
+            { name: 'Sam', daysKept: 6 },
             { name: 'Leo', daysKept: 9 },
             { name: 'Lorelei', daysKept: 14 }
         ], function (newBorrower) {
@@ -89,43 +89,20 @@ router.get('/as', function (req, res, next) {
 
 });
 
-router.get('/first20days', function (req, res, next) {
-  models.Borrower.findAll({
-    cte: [{
-      name: 'a',
-      model: models.Borrower,
-      cteAttributes: ['totalDays'],
-      initial: {
-        totalDays: { $model: 'daysKept' },
-        where: { name: 'George' }
-      },
-      recursive: {
-        totalDays: {
-          $add: [
-            { $model: 'daysKept' },
-            { $cte: 'totalDays' }
-          ]
-        },
-        next: 'next',
-        where: {
-          cte: {
-            totalDays: {
-              $lt: 20
-            }
-          }
-        }
-      }
-    }],
-    includeCTEAttributes: ['totalDays'],
-    cteSelect: 'a'
-  }).then(function (borrowers) {
+router.get('/20days/:username', function (req, res, next) {
 
-    res.render('borrowers', {
-      borrowers: borrowers
+    var username = req.params.username;
+
+    models.Borrower.scope({
+        method: ['nextTwentyDays', username]
+    }).findAll().then(function (borrowers) {
+
+        res.render('borrowers', {
+            borrowers: borrowers
+        });
+    }).catch(function (err) {
+        next(err);
     });
-  }).catch(function(err) {
-    next(err);
-  });
 });
 
 router.get('/last3borrowers', function (req, res, next) {
